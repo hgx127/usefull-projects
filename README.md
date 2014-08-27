@@ -13,3 +13,7 @@ usefull-projects
 > library utilizes [XHook](http://jpillora.com/xhook) to hook all XHR, so XDomain
 > will work seamlessly with any library.
 > https://github.com/jpillora/xdomain
+
+**evercookie**
+> https://github.com/samyk/evercookie
+> 删不掉的cookie
