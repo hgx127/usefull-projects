@@ -24,7 +24,7 @@ usefull-projects
 
 > https://github.com/Semantic-Org/Semantic-UI
 
-**trireme**
-> 将Node集成至JVM
+**将Node集成至JVM**
 
 > https://github.com/apigee/trireme
+> https://github.com/eclipsesource/J2V8
