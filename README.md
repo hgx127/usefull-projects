@@ -23,3 +23,8 @@ usefull-projects
 > 语义化UI
 
 > https://github.com/Semantic-Org/Semantic-UI
+
+**trireme**
+> 将Node集成至JVM
+
+> https://github.com/apigee/trireme
