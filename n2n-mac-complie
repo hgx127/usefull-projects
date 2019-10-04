@@ -1,0 +1,70 @@
+1. 下载源码 git clone https://github.com/meyerd/n2n.git
+
+2. 安装工具
+
+brew cask install tuntap
+brew install openssl
+brew install cmake
+3. 编译n2n
+
+~/n2n/n2n_v2$ mkdir build
+~/n2n/n2n_v2$  cd build
+~/n2n/n2n_v2/build$ cmake -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl ../
+-- The C compiler identification is AppleClang 8.1.0.8020042
+-- The CXX compiler identification is AppleClang 8.1.0.8020042
+-- Check for working C compiler: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc
+-- Check for working C compiler: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++
+-- Check for working CXX compiler: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found OpenSSL: /usr/local/opt/openssl/lib/libcrypto.dylib (found version "1.0.2l")
+-- Configuring done
+-- Generating done
+-- Build files have been written to: ~/n2n/n2n_v2/build
+~/n2n/n2n_v2/build$ sudo make install
+sudo chmod -R 777 /usr/local/sbin
+export PATH=$PATH:/usr/local/sbin
+4. 创建n2n连接
+
+sudo edge -d n2n0 -c mynetwork -k encryptme -u 99 -g 99 -m 3C:A0:12:34:56:78 -a 1.2.3.4 -l a.b.c.d:xyw -v -f
+5. 如果出现错误提示ERROR: Unable to open tap device，可以通过下面方式安装虚拟网卡
+
+brew cask install tuntap
+查看是否有如下两个内核扩展
+ls /Library/Extensions/tap.kext
+ls /Library/Extensions/tun.kext
+校验内核扩展的参数
+find /Library/Extensions/{tap,tun}.kext/ -type f | xargs shasum
+加载内核扩展
+sudo /sbin/kextload /Library/Extensions/tap.kext
+sudo /sbin/kextload /Library/Extensions/tun.kext
+6. edge帮助
+
+edge -d  < tun  device >  -a  < tun  IP address >  -c  < community >  -k  < encrypt  key >  -s  < netmask >  [-u  < uid >  -g  < gid > ][-f][-m  < MAC  address > ]  
+-l  < supernode  host:port >  [-p  < local  port > ] [-M  < mtu > ] [-t] [-r] [-v] [-b] [-h]  
+  
+-d  < tun  device >           | tun device name  
+-a  < tun  IP address >       | n2n IP address  
+-c  < community >            | n2n community name  
+-k  < encrypt  key >          | Encryption key (ASCII) - also  N2N_KEY = < encrypt  key >   
+-s  < netmask >              | Edge interface netmask in dotted decimal notation (255.255.255.0)  
+-l  < supernode  host:port >  | Supernode IP:port  
+-b                       | Periodically resolve supernode IP  
+                         | (when supernodes are running on dynamic IPs)  
+-p  < local  port >           | Local port used for connecting to supernode  
+-u  < UID >                  | User ID (numeric) to use when privileges are dropped  
+-g  < GID >                  | Group ID (numeric) to use when privileges are dropped  
+-f                       | Fork and run as a daemon. Use syslog.  
+-m  < MAC  address >          | Choose a MAC address for the TAP interface  
+                         | eg. -m 01:02:03:04:05:06  
+-M  < mtu >                  | Specify n2n MTU (default 1400)  
+-t                       | Use http tunneling (experimental)  
+-r                       | Enable packet forwarding through n2n community  
+-v                       | Verbose  
